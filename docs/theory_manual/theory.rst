@@ -17,7 +17,7 @@ Hypotheses
 ----------
 
 1. The fluid is inviscid.
-2. The fluid is incompressible: :math:`\nabla \cdot u = 0` with :math:`u` the flow velocity. 
+2. The fluid is incompressible: :math:`\nabla \cdot u = 0`, where :math:`u` is the flow velocity. 
 3. The flow is irrotational: :math:`\nabla \times u = 0`.
 4. The wave amplitude is small with respect to the wavelength.
 5. The amplitude of the body motion is small with respect to its dimension.
@@ -33,6 +33,12 @@ The mass conservation equation can be rewritten as the Laplace equation
    :label: laplace
 
 where :math:`\phi` is the velocity potential defined as :math:`u = \nabla \phi`.
+
+.. note:: The Laplace equation:
+
+    In Cartesian coordiantes: :math:`\nabla^2 f = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2}+ \frac{\partial^2 f}{\partial z^2} = 0`
+
+    In cylindrical coordiantes: :math:`\nabla^2 f = \frac{1}{r} \frac{\partial}{\partial r} \left( r \frac{\partial f}{\partial r} \right) + \frac{1}{r^2} \frac{\partial^2 f}{\partial \varphi^2} + \frac{\partial^2 f}{\partial z^2} = 0`
 
 Since the problem is linear, we look for a solution in the frequency domain:
 
@@ -82,15 +88,17 @@ It depends on the type of problem:
 
     .. math::
        \Phi_0 = - i \frac{g}{\omega} \frac{\cosh (m_0 (z+h))}{\cosh (m_0 h)} e^{i m_0 (x \cos \beta + y \sin \beta)}
+       :label: wave_vel_finite_depth
 
     in finite depth, where the wave number :math:`m_0` is defined by the dispersion relation :math:`\omega^2 = m_0 g \tanh (m_0 h)`, and by
 
     .. math::
        \Phi_0 = - i \frac{g}{\omega} e^{k z} e^{i k (x \cos \beta + y \sin \beta)}
+       :label: wave_vel_infinite_depth
 
     in infinite depth, where the wave number :math:`k` is defined by :math:`\omega^2 = k g`.
 
-    In the above equations, :math:`\beta` is the angle of the incoming wave.
+    In :eq:`wave_vel_finite_depth` and :eq:`wave_vel_infinite_depth`, :math:`\beta` is the angle of the incoming wave.
     The angle :math:`\beta = 0` corresponds to waves propagating in the :math:`x` direction from :math:`x=-\infty` to :math:`x=+\infty`.
     The angle :math:`\beta = \pi/2` corresponds to waves propagating in the :math:`y` direction from :math:`y=-\infty` to :math:`y=+\infty`.
 
@@ -99,7 +107,7 @@ Integral problem
 ----------------
 
 The partial differential equation can be rewritten as a boundary integral problem.
-Let us introduce the Green function :math:`G(\xi, \cdot)`, which is solution of the partial differential equation:
+Let us introduce the Green function :math:`G(\xi, \cdot)`, which is the solution of the partial differential equation:
 
 .. math::
    \nabla^2_x G(\xi, x) = \delta(\xi - x), \qquad \forall x,
@@ -119,7 +127,7 @@ The integral on the other boundaries of the domain is zero due to the properties
 The differentiation of :eq:`continuous_source_formulation` leads to the following equation [Del87]_:
 
 .. math::
-   (u \cdot n)(x) = \frac{\sigma(x)}{2} + \iint_\Gamma \sigma(y) \, (\nabla_x G(x, y) \cdot n) \, \mathrm{dS}(y).
+   (u \cdot n)(x) = \frac{\sigma(x)}{2} + \iint_\Gamma \sigma(y) \, \left( \nabla_x G(x, y) \cdot n \right) \, \mathrm{dS}(y).
    :label: diff_continuous_source_formulation
 
 where :math:`n` is the normal vector on the floating body surface :math:`\Gamma`.
