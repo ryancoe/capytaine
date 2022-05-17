@@ -34,61 +34,50 @@ See the examples in the :doc:`cookbook` for usage in a 3D animation.
 Impedance and RAO
 -----------------
 
-The intrinsic impedance can be computed based on the hydrodynamics, 
+The intrinsic impedance can be computed based on the hydrodynamics,
 hydrostatics, and inertial properties::
 
     import numpy as np
     import xarray as xr
     from capytaine import BEMSolver
     from capytaine.bodies.predefined.spheres import Sphere
-    from capytaine.post_pro import impedance
-    
-    sphere = Sphere(radius=r, ntheta=3, nphi=12, clip_free_surface=True)
-    sphere.add_all_rigid_body_dofs()
+    from capytaine.post_pro import velocity_impedance
     
     f = np.linspace(0.1, 2.0)
     omega = 2*np.pi*f
     rho_water = 1e3
     r = 1
-    m = 1.866e+03
-    
-    M = np.array([
-           [ m,  0.000e+00,  0.000e+00,  0.000e+00,  0.000e+00,  0.000e+00],
-           [ 0.000e+00,  1.866e+03,  0.000e+00,  0.000e+00,  0.000e+00,  0.000e+00],
-           [ 0.000e+00,  0.000e+00,  1.866e+03,  0.000e+00,  0.000e+00,  0.000e+00],
-           [ 0.000e+00,  0.000e+00,  0.000e+00,  4.469e+02,  9.676e-31, -2.757e-14],
-           [ 0.000e+00,  0.000e+00,  0.000e+00,  9.676e-31,  4.469e+02,  3.645e-15],
-           [ 0.000e+00,  0.000e+00,  0.000e+00, -2.757e-14,  3.645e-15,  6.816e+02]])
-    
-    kHS = np.array([
-        [    0.   ,     0.   ,     0.   ,     0.   ,     0.   ,     0.   ],
-        [    0.   ,     0.   ,     0.   ,     0.   ,     0.   ,     0.   ],
-        [    0.   ,     0.   , 29430.   ,     0.   ,     0.   ,     0.   ],
-        [    0.   ,     0.   ,     0.   ,   328.573,     0.   ,     0.   ],
-        [    0.   ,     0.   ,     0.   ,     0.   ,   328.573,     0.   ],
-        [    0.   ,     0.   ,     0.   ,     0.   ,     0.   ,     0.   ]])
-    
-    sphere.mass = sphere.add_dofs_labels_to_matrix(M)
-    sphere.hydrostatic_stiffness = sphere.add_dofs_labels_to_matrix(kHS)
+
+    sphere = Sphere(radius=r, ntheta=3, nphi=12, clip_free_surface=True)
+    sphere.center_of_mass = np.array([0, 0, 0])
+    sphere.add_all_rigid_body_dofs()
+
+    sphere.mass = sphere.compute_rigid_body_inertia(rho=rho_water)
+    sphere.hydrostatic_stiffness = sphere.compute_hydrostatic_stiffness(rho=rho_water)
+
     solver = BEMSolver()
-    
     test_matrix = xr.Dataset(coords={
-        'rho': rho_water,                         
-        'water_depth': [np.infty],          
+        'rho': rho_water,
+        'water_depth': [np.infty],
         'omega': omega,
         'wave_direction': 0,
-        'radiating_dof': list(sphere_fb.dofs.keys()),
+        'radiating_dof': list(sphere.dofs.keys()),
         })
     
-    data = solver.fill_dataset(test_matrix, [sphere_fb],
+    data = solver.fill_dataset(test_matrix, sphere_fb,
                                hydrostatics=True,
                                mesh=True,
                                wavelength=True,
                                wavenumber=True)
     
-    Zi = impedance(data)
+    Zi = velocity_impedance(data)
 
-By simple extension of incorporating the excitation transfer function response 
+
+
+Note that we assigned the inertia and stiffness to attributes of :code:`body` called :code:`mass` and :code:`hydrostatic_stiffness`.
+These are the name expected by the :code:`velocity_impedance` function to compute the impedance matrix.
+
+By simple extension of incorporating the excitation transfer function response
 amplitude operator (RAO)::
 
     from capytaine.post_pro import rao

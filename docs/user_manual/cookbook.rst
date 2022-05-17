@@ -46,9 +46,11 @@ Simulation with several bodies
 .. literalinclude:: examples/multibody.py
    :language: python
 
-Adding hydrostatic stiffness and mass properties
-------------------------------------------------
-Hydrostatic and inertia propoerties can be computed via Meshmagick for use with the hydrodynamic results generated with Capytaine.
+Comparison with hydrostatics from Meshmagick
+--------------------------------------------
+
+Hydrostatic and inertia propoerties can be computed independantly via Capytaine or Meshmagick.
+This script compare them both with analytical expression for a simple geometric object.
 
 .. literalinclude:: examples/hydrostatics.py
    :language: python
@@ -83,6 +85,17 @@ This example computes the Kochin function for a surging buoy and plot the result
 
 .. literalinclude:: examples/kochin.py
    :language: python
+
+Haskind's relation
+------------------
+
+This example computes the excitation force from the radiation potential
+using Haskind's relation. The result is compared with the one obtained by
+direct integration of the potentials from incident waves and from the
+diffraction problem.
+
+.. literalinclude:: examples/haskind.py
+    :language: python
 
 Symmetric body
 --------------
