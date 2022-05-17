@@ -474,7 +474,7 @@ The potential at the reference surface :math:`z = 0` can be connected to the fre
 
 which, in frequency domain, is
 
-.. math:: \eta = \dfrac{j \omega}{g} \Phi
+.. math:: \eta = \dfrac{j \omega}{g} \Phi .
 
 For a fully coupled problem (bodies free to oscillate, i.e. diffraction and radiation combined), the free surface elevation can be computed as 
 
